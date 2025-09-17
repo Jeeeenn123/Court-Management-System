@@ -1,0 +1,135 @@
+<?php
+
+        if ($result->num_rows > 0) {
+            echo "<table>";
+            echo "<tr>
+                    <th>ID</th>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Phonenumber</th>
+                    <th>Court_Type</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Created Booking</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>"; 
+            while($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row["reservation_id"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["fullname"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["phonenumber"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["court_type"]) . "</td>";
+                echo "<td>" . date("F j, Y", strtotime($row["date"])) . "</td>";
+                echo "<td>" . htmlspecialchars($row["time"]) . "</td>";
+                echo "<td>" . date("F j, Y g:i A", strtotime($row["created_at"])) . "</td>";
+                echo "<td>" . htmlspecialchars($row["status"]) . "</td>";
+                echo "<td>
+                        <a href='update.php?id=" . $row["reservation_id"] . "&action=accept'>
+                            <button class='button-action button-accept'>Accept</button>
+                        </a>
+                        <a href='update.php?id=" . $row["reservation_id"] . "&action=deny'>
+                            <button class='button-action button-deny'>Deny</button>
+                        </a>
+                     </td>";    
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "No results found.";
+        }
+
+        $conn->close();
+ 
+    ?>
+
+<span class="material-symbols-outlined">block</span>
+
+if (isset($_GET['action']) && isset($_GET['reservation_id'])) {
+    $id = $_GET['reservation_id'];
+    $action = $_GET['action']; 
+
+    $new_status = ($action == 'accept') ? 'accepted' : 'denied';
+
+    $sql = "SELECT * FROM reservations WHERE reservation_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        $insert = "INSERT INTO total_accepted (fullname, court_type, date, time_in, time_out, status) 
+                   VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt2 = $conn->prepare($insert);
+        $stmt2->bind_param(
+            "ssssss",
+            $row['fullname'],
+            $row['court_type'],
+            $row['date'],
+            $row['time_in'],
+            $row['time_out'],
+            $new_status
+        );
+        $stmt2->execute();
+
+        $delete = "DELETE FROM reservations WHERE id = ?";
+        $stmt3 = $conn->prepare($delete);
+        $stmt3->bind_param("i", $id);
+        $stmt3->execute();
+
+        echo "Reservation has been " . $new_status . " and moved to table2.";
+    } else {
+        echo "Record not found!";
+    }
+}
+
+
+<?php
+include "../db_connect.php";
+
+if (isset($_GET['id']) && isset($_GET['action'])) {
+    $id = intval($_GET['id']);
+    $action = $_GET['action'];
+
+    $status = '';
+    if ($action === 'accept') {
+        $status = 'Accepted';
+    } elseif ($action === 'deny') {
+        $status = 'Denied';
+    }
+
+    if ($status) {
+        $stmt = $conn->prepare("UPDATE reservations SET status=? WHERE reservation_id=?");
+        $stmt->bind_param("si", $status, $id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Reservation updated to $status'); window.location.href='bookings.php';</script>";
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+
+        $stmt->close();
+    } else {
+        echo "Invalid action.";
+    }
+} else {
+    echo "Missing ID or action.";
+}
+
+$conn->close();
+?>
+
+
+
+
+
+
+
+
+
+
+
+
