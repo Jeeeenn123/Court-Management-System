@@ -1,0 +1,199 @@
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+    margin: 2px;   
+    font-size: 20px;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    background-color: #000;
+}
+.nav-bar{
+    background-color: rgb(184, 212, 243);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    height: 50px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.logo{
+    margin-left: 15px;
+    font-weight: bold;
+}
+.align-right{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #000000;
+  font-weight: 500;
+}
+.nav-links li a:hover{
+    color: #7a6e35;
+}
+.logoutBtn{
+    background-color:rgb(114, 181, 253);
+    cursor: pointer;
+}
+.logoutBtn:hover {
+    background-color:rgb(245, 73, 43);
+}
+.logo img{
+    width: 90px;
+    margin-top: 4px;
+    margin-left: -20px;
+}
+section{
+    height: 100vh;
+}
+#home{
+    background: 
+    url(../imgs/basketball2.png) left center no-repeat,
+    url(../imgs/volleyball2.png) right center no-repeat,
+    linear-gradient(to right, transparent 49.5%, black 50%, transparent 50.5%);
+    background-size: 
+    50% 100%,
+    50% 101%,
+    100% 100%;
+    background-repeat: no-repeat;
+}
+
+#court{
+    background: linear-gradient(to bottom, #0072ff, #1f005c);
+}
+.section-heading{
+    text-align: center;
+    padding-top: 70px;
+}
+.court-section{
+    background-color: #faf6bf;
+    margin: auto;
+    margin-top: 40px;
+    width: 700px;
+    height: 400px;
+}
+.slider{
+    position: relative;
+}
+.slider img{
+    width: 700px;
+    height: 400px;
+    display: none;
+}
+.slider img.displaySlide{
+    display: block;
+}
+.court-section button{
+    position: absolute;
+    top: 160%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background-color: #000000;
+    color: #fdfbdf;
+    padding: 3px;
+    border: none;
+    cursor: pointer;
+}
+.court-section button:hover{
+    background-color: #1f1f1f;
+}
+.prev{
+    left: 0;
+    margin-left: 25%;
+}
+.next{
+    right: 0;
+    margin-right: 25%;
+}
+.menu-btn{
+    width: 40px;
+    padding: 2px;
+    border: 1px solid rgb(212, 212, 212);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.dropdown a {
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-content: column;
+    margin-top: 30px;
+}
+.dropdown .content-dropdown {
+    display: none;
+    position: absolute;
+    background-color: rgb(125, 168, 218);
+    margin-top: 9px;
+    margin-left: -250px;
+    width: 300px;
+    height: 250px;
+    padding: 20px;
+    border-radius: 5px;
+}
+.dropdown a button{
+    width: 100%;
+    height: 30px;
+    border: 1px solid rgb(58, 109, 105);
+    border-radius: 3px;
+    cursor: pointer;
+}
+.sections{
+    padding: 20px;
+    text-align: center;
+}
+.section1{
+    background-color: rgba(0, 0, 0, 0.561);
+    height: 250px;
+    width: 100%;
+    text-align: justify;
+    color: #fff;
+    padding: 20px;
+    margin-top: 50px;
+}
+.section2{
+    background-color: rgba(0, 0, 0, 0.561);
+    color: #fff;
+    height: 270px;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+}
+.table{
+    margin-top: -20px;
+    border-spacing: 10px;
+    width: 100%;
+    margin-top: 5px;
+}
+.table tr th{
+    border: 1px solid;
+    padding: 1px;
+}
+#table{
+    background-color: #9c6bff;
+    height: 150px;
+    overflow: auto;
+}

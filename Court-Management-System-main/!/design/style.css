@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.parent{
+    background-color: rgb(222, 240, 255);
+    overflow: auto;
+}
+.content{
+    background-color: rgb(223, 243, 255);
+    height: 100vh;
+}
+.header{
+    background-color: rgb(0, 165, 110);
+    height: 70px;
+}
+header{
+    padding: 25px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+.navbar{
+    height: 30px;
+    background-color: rgb(207, 207, 207);
+    padding: 5px;
+    padding-left: 10px  ;
+}
+.navbar a{
+    
+}
+.content a{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+.buttons{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    margin-left: 250px;    
+}
+.buttons > div{
+    margin: 10px;
+    align-items: center;
+    text-align: center;
+}
+.buttons button{
+    justify-content: space-evenly;
+    height: 150px;
+    width: 150px;
+    cursor: pointer;
+    align-items: center;
+    text-align: center; 
+    font-weight: 900;
+    font-size: 15px;
+}
+.buttons svg{
+
+}
+.buttons a{
+    text-align: center;
+    align-items: center;
+    
+}

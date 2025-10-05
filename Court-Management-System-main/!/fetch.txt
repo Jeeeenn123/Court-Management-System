@@ -1,0 +1,79 @@
+<?php
+// fetch_bookings.php
+// Returns:
+//  - If ?date=YYYY-MM-DD : JSON array of booked times: [ { "time": "8AM - 9AM" }, ... ]
+//  - Otherwise: JSON array of background events for FullCalendar: [ { start: "YYYY-MM-DD", display:"background", color:"#ffe5e5" }, ... ]
+
+include "../db_connect.php";
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$conn->set_charset('utf8mb4');
+
+header('Content-Type: application/json; charset=utf-8');
+
+function table_exists($conn, $name) {
+    $name = $conn->real_escape_string($name);
+    $res = $conn->query("SHOW TABLES LIKE '{$name}'");
+    return $res && $res->num_rows > 0;
+}
+
+try {
+    // If a specific date is requested, return booked times for that date.
+    if (isset($_GET['date']) && $_GET['date'] !== '') {
+        $date = $_GET['date'];
+
+        // Prefer reservations.time_slot, fallback to bookings.time
+        if (table_exists($conn, 'reservations')) {
+            $sql = "SELECT time_slot AS time FROM reservations WHERE `date` = ? AND status IN ('PENDING','ACCEPTED')";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $date);
+        } elseif (table_exists($conn, 'bookings')) {
+            $sql = "SELECT time FROM bookings WHERE date = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $date);
+        } else {
+            echo json_encode([]);
+            exit;
+        }
+
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $out = [];
+        while ($row = $res->fetch_assoc()) {
+            $out[] = ['time' => $row['time']];
+        }
+        echo json_encode($out);
+        exit;
+    }
+
+    // Otherwise return background events (unique dates that have bookings)
+    $events = [];
+
+    if (table_exists($conn, 'reservations')) {
+        $sql = "SELECT `date` FROM reservations WHERE status IN ('PENDING','ACCEPTED') GROUP BY `date`";
+        $res = $conn->query($sql);
+        while ($r = $res->fetch_assoc()) {
+            $events[] = [
+                'start' => $r['date'],
+                'display' => 'background',
+                'color' => '#3cff00ff'
+            ];
+        }
+    } elseif (table_exists($conn, 'bookings')) {
+        $sql = "SELECT date FROM bookings GROUP BY date";
+        $res = $conn->query($sql);
+        while ($r = $res->fetch_assoc()) {
+            $events[] = [
+                'start' => $r['date'],
+                'display' => 'background',
+                'color' => '#3cff00ff'
+            ];
+        }
+    } else {
+        // no tables found, return empty
+    }
+
+    echo json_encode($events);
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['error' => true, 'message' => $e->getMessage()]);
+}
